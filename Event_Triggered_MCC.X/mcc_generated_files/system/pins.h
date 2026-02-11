@@ -8,11 +8,11 @@
  * @brief This is generated driver header for pins. 
  *        This header file provides APIs for all pins selected in the GUI.
  *
- * @version Driver Version  1.0.1
+ * @version Driver Version  1.1.0
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2026] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -37,6 +37,25 @@
 
 #include <avr/io.h>
 #include "./port.h"
+
+//get/set IO_PD1 aliases
+#define IO_PD1_SetHigh() do { PORTD_OUTSET = 0x2; } while(0)
+#define IO_PD1_SetLow() do { PORTD_OUTCLR = 0x2; } while(0)
+#define IO_PD1_Toggle() do { PORTD_OUTTGL = 0x2; } while(0)
+#define IO_PD1_GetValue() (VPORTD.IN & (0x1 << 1))
+#define IO_PD1_SetDigitalInput() do { PORTD_DIRCLR = 0x2; } while(0)
+#define IO_PD1_SetDigitalOutput() do { PORTD_DIRSET = 0x2; } while(0)
+#define IO_PD1_SetPullUp() do { PORTD_PIN1CTRL  |= PORT_PULLUPEN_bm; } while(0)
+#define IO_PD1_ResetPullUp() do { PORTD_PIN1CTRL  &= ~PORT_PULLUPEN_bm; } while(0)
+#define IO_PD1_SetInverted() do { PORTD_PIN1CTRL  |= PORT_INVEN_bm; } while(0)
+#define IO_PD1_ResetInverted() do { PORTD_PIN1CTRL  &= ~PORT_INVEN_bm; } while(0)
+#define IO_PD1_DisableInterruptOnChange() do { PORTD.PIN1CTRL = (PORTD.PIN1CTRL & ~PORT_ISC_gm) | 0x0 ; } while(0)
+#define IO_PD1_EnableInterruptForBothEdges() do { PORTD.PIN1CTRL = (PORTD.PIN1CTRL & ~PORT_ISC_gm) | 0x1 ; } while(0)
+#define IO_PD1_EnableInterruptForRisingEdge() do { PORTD.PIN1CTRL = (PORTD.PIN1CTRL & ~PORT_ISC_gm) | 0x2 ; } while(0)
+#define IO_PD1_EnableInterruptForFallingEdge() do { PORTD.PIN1CTRL = (PORTD.PIN1CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
+#define IO_PD1_DisableDigitalInputBuffer() do { PORTD.PIN1CTRL = (PORTD.PIN1CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
+#define IO_PD1_EnableInterruptForLowLevelSensing() do { PORTD.PIN1CTRL = (PORTD.PIN1CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
+#define PD1_SetInterruptHandler IO_PD1_SetInterruptHandler
 
 //get/set PF2 aliases
 #define PF2_SetHigh() do { PORTF_OUTSET = 0x4; } while(0)
@@ -73,6 +92,7 @@
 #define LED_EnableInterruptForFallingEdge() do { PORTF.PIN5CTRL = (PORTF.PIN5CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
 #define LED_DisableDigitalInputBuffer() do { PORTF.PIN5CTRL = (PORTF.PIN5CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
 #define LED_EnableInterruptForLowLevelSensing() do { PORTF.PIN5CTRL = (PORTF.PIN5CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
+#define PF5_SetInterruptHandler LED_SetInterruptHandler
 
 /**
  * @ingroup  pinsdriver
@@ -81,6 +101,27 @@
  * @return none
  */
 void PIN_MANAGER_Initialize();
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Default Interrupt Handler for IO_PD1 pin. 
+ *        This is a predefined interrupt handler to be used together with the IO_PD1_SetInterruptHandler() method.
+ *        This handler is called every time the IO_PD1 ISR is executed. 
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param none
+ * @return none
+ */
+void IO_PD1_DefaultInterruptHandler(void);
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Interrupt Handler Setter for IO_PD1 pin input-sense-config functionality.
+ *        Allows selecting an interrupt handler for IO_PD1 at application runtime
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param InterruptHandler function pointer.
+ * @return none
+ */
+void IO_PD1_SetInterruptHandler(void (* interruptHandler)(void)) ; 
 
 /**
  * @ingroup  pinsdriver
@@ -105,22 +146,22 @@ void PF2_SetInterruptHandler(void (* interruptHandler)(void)) ;
 
 /**
  * @ingroup  pinsdriver
- * @brief Default Interrupt Handler for PF5 pin. 
- *        This is a predefined interrupt handler to be used together with the PF5_SetInterruptHandler() method.
- *        This handler is called every time the PF5 ISR is executed. 
+ * @brief Default Interrupt Handler for LED pin. 
+ *        This is a predefined interrupt handler to be used together with the LED_SetInterruptHandler() method.
+ *        This handler is called every time the LED ISR is executed. 
  * @pre PIN_MANAGER_Initialize() has been called at least once
  * @param none
  * @return none
  */
-void PF5_DefaultInterruptHandler(void);
+void LED_DefaultInterruptHandler(void);
 
 /**
  * @ingroup  pinsdriver
- * @brief Interrupt Handler Setter for PF5 pin input-sense-config functionality.
- *        Allows selecting an interrupt handler for PF5 at application runtime
+ * @brief Interrupt Handler Setter for LED pin input-sense-config functionality.
+ *        Allows selecting an interrupt handler for LED at application runtime
  * @pre PIN_MANAGER_Initialize() has been called at least once
  * @param InterruptHandler function pointer.
  * @return none
  */
-void PF5_SetInterruptHandler(void (* interruptHandler)(void)) ; 
+void LED_SetInterruptHandler(void (* interruptHandler)(void)) ; 
 #endif /* PINS_H_INCLUDED */

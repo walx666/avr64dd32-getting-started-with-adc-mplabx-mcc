@@ -5,12 +5,14 @@
  * 
  * @defgroup systemdriver System Driver
  * 
- * @brief This is the generated header file for the System Driver.
+ * @brief This file contains the API prototype for the System Driver.
  *
- * @version Driver Version 1.0.1
+ * @version Driver Version 1.0.3
+ *
+ * @version Package Version 4.3.0
 */
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2026] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -38,22 +40,18 @@
 extern "C" {
 #endif
 
-/**
-  Section: Included Files
-*/
 #include "../system/utils/compiler.h"
-#include "../system/clock.h"
+#include "config_bits.h"
 #include "../system/pins.h"
-#include "../adc/adc0.h"
-#include "../system/clock.h"
 #include "../vref/vref.h"
 #include "../system/interrupt.h"
+#include "../system/clock.h"
+#include "../adc/adc0.h"
 /**
  * @ingroup systemdriver
- * @brief This initializes the system module and must be called before any other API is called.
- * This routine should only be called once during system initialization.
- * @param None
- * @return None
+ * @brief Initializes the System module. This routine is called only once during system initialization, before calling any other API.
+ * @param None.
+ * @return None.
 */
 void SYSTEM_Initialize(void);
 

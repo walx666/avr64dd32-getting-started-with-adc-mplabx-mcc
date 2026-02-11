@@ -8,11 +8,11 @@
  * @brief This is generated driver implementation for pins. 
  *        This file provides implementations for pin APIs for all pins selected in the GUI.
  *
- * @version Driver Version 1.0.1
+ * @version Driver Version 1.1.0
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2026] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -34,22 +34,24 @@
 
 #include "../pins.h"
 
+static void (*IO_PD1_InterruptHandler)(void);
 static void (*PF2_InterruptHandler)(void);
-static void (*PF5_InterruptHandler)(void);
+static void (*LED_InterruptHandler)(void);
 
 void PIN_MANAGER_Initialize()
 {
-  /* DIR Registers Initialization */
-    PORTA.DIR = 0x0;
-    PORTC.DIR = 0x0;
-    PORTD.DIR = 0x0;
-    PORTF.DIR = 0x20;
 
   /* OUT Registers Initialization */
     PORTA.OUT = 0x0;
     PORTC.OUT = 0x0;
     PORTD.OUT = 0x0;
     PORTF.OUT = 0x20;
+
+  /* DIR Registers Initialization */
+    PORTA.DIR = 0x0;
+    PORTC.DIR = 0x0;
+    PORTD.DIR = 0x0;
+    PORTF.DIR = 0x20;
 
   /* PINxCTRL registers Initialization */
     PORTA.PIN0CTRL = 0x0;
@@ -96,10 +98,24 @@ void PIN_MANAGER_Initialize()
     PORTMUX.USARTROUTEA = 0x0;
 
   // register default ISC callback functions at runtime; use these methods to register a custom function
+    IO_PD1_SetInterruptHandler(IO_PD1_DefaultInterruptHandler);
     PF2_SetInterruptHandler(PF2_DefaultInterruptHandler);
-    PF5_SetInterruptHandler(PF5_DefaultInterruptHandler);
+    LED_SetInterruptHandler(LED_DefaultInterruptHandler);
 }
 
+/**
+  Allows selecting an interrupt handler for IO_PD1 at application runtime
+*/
+void IO_PD1_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    IO_PD1_InterruptHandler = interruptHandler;
+}
+
+void IO_PD1_DefaultInterruptHandler(void)
+{
+    // add your IO_PD1 interrupt custom code
+    // or set custom function using IO_PD1_SetInterruptHandler()
+}
 /**
   Allows selecting an interrupt handler for PF2 at application runtime
 */
@@ -114,17 +130,17 @@ void PF2_DefaultInterruptHandler(void)
     // or set custom function using PF2_SetInterruptHandler()
 }
 /**
-  Allows selecting an interrupt handler for PF5 at application runtime
+  Allows selecting an interrupt handler for LED at application runtime
 */
-void PF5_SetInterruptHandler(void (* interruptHandler)(void)) 
+void LED_SetInterruptHandler(void (* interruptHandler)(void)) 
 {
-    PF5_InterruptHandler = interruptHandler;
+    LED_InterruptHandler = interruptHandler;
 }
 
-void PF5_DefaultInterruptHandler(void)
+void LED_DefaultInterruptHandler(void)
 {
-    // add your PF5 interrupt custom code
-    // or set custom function using PF5_SetInterruptHandler()
+    // add your LED interrupt custom code
+    // or set custom function using LED_SetInterruptHandler()
 }
 ISR(PORTA_PORT_vect)
 { 
@@ -140,6 +156,11 @@ ISR(PORTC_PORT_vect)
 
 ISR(PORTD_PORT_vect)
 { 
+    // Call the interrupt handler for the callback registered at runtime
+    if(VPORTD.INTFLAGS & PORT_INT1_bm)
+    {
+       IO_PD1_InterruptHandler(); 
+    }
     /* Clear interrupt flags */
     VPORTD.INTFLAGS = 0xff;
 }
@@ -153,7 +174,7 @@ ISR(PORTF_PORT_vect)
     }
     if(VPORTF.INTFLAGS & PORT_INT5_bm)
     {
-       PF5_InterruptHandler(); 
+       LED_InterruptHandler(); 
     }
     /* Clear interrupt flags */
     VPORTF.INTFLAGS = 0xff;

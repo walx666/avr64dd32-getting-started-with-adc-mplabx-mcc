@@ -1,14 +1,16 @@
 /**
-  * RTC Generated Driver File
+  * RTC Generated Driver API Source File.
   *
   * @file rtc.c
   *
   * @ingroup rtc
-  * @brief This file contains the driver code for RTC module.
-  * version RTC Driver Version 2.0.1
+  *
+  * @brief This file contains the API implementations for the RTC driver.
+  *
+  * version RTC Driver Version 2.1.0
 */
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2026] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -51,8 +53,12 @@ int8_t RTC_Initialize(void)
     //Clock selection
     RTC.CLKSEL = 0x0;
 
+
     // CMP disabled; OVF enabled; 
     RTC.INTCTRL = 0x1;
+
+    // DBGRUN disabled; 
+    RTC.DBGCTRL = 0x0;
 
     // CORREN disabled; PRESCALER RTC Clock / 32; RTCEN enabled; RUNSTDBY disabled; 
     RTC.CTRLA = 0x29;
@@ -62,6 +68,9 @@ int8_t RTC_Initialize(void)
     }
     // PI disabled; 
 	RTC.PITINTCTRL = 0x0;
+
+    // DBGRUN disabled; 
+    RTC.PITDBGCTRL = 0x0;
 
     return 0;
 }
@@ -93,7 +102,7 @@ void RTC_SetPITIsrCallback(RTC_cb_t cb)
 
 ISR(RTC_CNT_vect)
 {
-    if (RTC.INTFLAGS & RTC_OVF_bm )
+    if ( (RTC.INTCTRL & RTC_OVF_bm) && (RTC.INTFLAGS & RTC_OVF_bm) )
     {
         if (RTC_OVF_isr_cb != NULL) 
         {
@@ -101,7 +110,7 @@ ISR(RTC_CNT_vect)
         } 
     }  
     
-    if (RTC.INTFLAGS & RTC_CMP_bm )
+    if ( (RTC.INTCTRL & RTC_CMP_bm) && (RTC.INTFLAGS & RTC_CMP_bm) )
     {
         if (RTC_CMP_isr_cb != NULL) 
         {
@@ -131,7 +140,7 @@ inline uint16_t RTC_ReadCounter(void)
     return RTC.CNT;
 }
 
-inline void RTC_WritePeroid(uint16_t timerVal)
+inline void RTC_WritePeriod(uint16_t timerVal)
 {
     while (RTC.STATUS & RTC_PERBUSY_bm);
     RTC.PER = timerVal;
@@ -180,4 +189,14 @@ inline void RTC_ClearOVFInterruptFlag(void)
 inline bool RTC_IsOVFInterruptEnabled(void)
 {
     return ((RTC.INTCTRL & RTC_OVF_bm) > 0);
+}
+
+inline void RTC_WriteCMPRegister(uint16_t value)
+{
+    RTC.CMP = value;
+}
+
+inline uint16_t RTC_ReadCMPRegister(void)
+{
+    return RTC.CMP;
 }

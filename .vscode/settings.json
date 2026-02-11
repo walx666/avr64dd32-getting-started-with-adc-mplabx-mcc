@@ -1,0 +1,4 @@
+{
+    "mplab.project.workspace.addNewSourceFiles": "Always",
+    "cmake.ignoreCMakeListsMissing": true
+}

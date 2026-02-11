@@ -1,16 +1,16 @@
 /**
- * RTC Generated Driver API Header File
+ * RTC Generated Driver API Header File.
  *
  * @file rtc.h
  *
- * defgroup rtc RTC
+ * @defgroup rtc RTC
  *
- * @brief This header file provides APIs for the RTC driver.
+ * @brief This file contains the API prototypes of the RTC driver.
  *
- * @version RTC Driver Version 2.0.1
+ * @version RTC Driver Version 2.1.0
 */
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2026] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -41,136 +41,151 @@
 /**
  * @ingroup rtc
  * @typedef void RTC_cb_t
- * @brief Function pointer to callback function called by RTC. NULL=default value: No callback function is to be used.
+ * @brief Function pointer to callback function called by the RTC. The default value is set to NULL which means that no callback function will be used.
  */ 
 typedef void (*RTC_cb_t)(void);
 /**
  * @ingroup rtc
- * @brief Isr callback function to be called if overflow interrupt flag is set.
- * @param RTC_cb_t cb - call back value for overflow.
- * @return none
+ * @brief Interrupt Service Routine (ISR) callback function to be called if Overflow (OVF) Interrupt flag is set.
+ * @param RTC_cb_t cb - Callback function to be called on Overflow event.
+ * @return None.
  */ 
 void RTC_SetOVFIsrCallback(RTC_cb_t cb);
 /**
  * @ingroup rtc
- * @brief Isr callback function to be called if Compare match interrupt flag is set.
- * @param RTC_cb_t cb - call back value for compare.
- * @return none
+ * @brief ISR callback function to be called if Compare (CMP) match Interrupt flag is set.
+ * @param RTC_cb_t cb - Callback function to be called on compare match event.
+ * @return None.
  */ 
 void RTC_SetCMPIsrCallback(RTC_cb_t cb);
 /**
  * @ingroup rtc
- * @brief Isr callback function to be called if PIT interrupt flag is set.
- * @param RTC_cb_t cb - call back value for PIT.
- * @return none
+ * @brief ISR callback function to be called if the Periodic Interrupt Timer (PIT) Interrupt flag is set.
+ * @param RTC_cb_t cb - Callback function to be called on periodic interrupt event.
+ * @return None.
  */ 
 void RTC_SetPITIsrCallback(RTC_cb_t cb);
 /**
  * @ingroup rtc
- * @brief Initialize RTC interface.
- * @param none
- * @retval 0 - the RTC init was successful
- * @retval 1 - the RTC init was not successful
+ * @brief Initializes the RTC module.
+ * @param None.
+ * @retval 0 - the RTC initialization is successful
+ * @retval 1 - the RTC initialization is not successful
  */ 
 int8_t RTC_Initialize(void);
 /**
  * @ingroup rtc
- * @brief API to start the counter register for RTC interface
- * @param none
- * @return none
+ * @brief Starts the counter register for the RTC module.
+ * @param None.
+ * @return None.
  */
 void RTC_Start(void);
 /**
  * @ingroup rtc
- * @brief API to stop the counter register for RTC interface
- * @param none
- * @return none
+ * @brief Stops the counter register for the RTC module.
+ * @param None.
+ * @return None.
  */
 void RTC_Stop(void);
 /**
  * @ingroup rtc
- * @brief API to write the counter value for RTC.
- * @param uint16_t timerVal - Loading the counter value to write for RTC.
- * @return none
+ * @brief Writes a value to the Counter register of the RTC module.
+ * @param uint16_t timerVal - Value to be written to the Counter register of the RTC.
+ * @return None.
  */
 void RTC_WriteCounter(uint16_t timerVal);
 /**
  * @ingroup rtc
- * @brief API to write the counter value to load for RTC.
- * @param uint16_t timerVal - Loading the write period to determine overflow period in RTC.
- * @return none
+ * @brief Writes a value to the Period register of the RTC module.
+ * @param uint16_t timerVal - Value to be written to the Period register of the RTC.
+ * @return None.
  */
-void RTC_WritePeroid(uint16_t timerVal);
+void RTC_WritePeriod(uint16_t timerVal);
 /**
  * @ingroup rtc
- * @brief API to read the counter clock cycle value from counter register.
- * @param none
- * @return uint16_t - Counter values returns from the RTC interface.
+ * @brief Returns the counter value from the Counter register.
+ * @param None.
+ * @return uint16_t - Value of the Counter register.
  */
 uint16_t RTC_ReadCounter(void);
 /**
  * @ingroup rtc
- * @brief API to read the overflow value in period register.
- * @param none
- * @return uint16_t - Period values returns from the RTC interface.
+ * @brief Returns the value of the Period register.
+ * @param None.
+ * @return uint16_t - Value of the Period register.
  */
 uint16_t RTC_ReadPeriod(void);
 /**
  * @ingroup rtc
- * @brief Enable the CMP interrupt to set the flag, if match value between counter register and compare register.
- * @param none
- * @return none
+ * @brief Enables the Compare (CMP) Interrupt.
+ * @param None.
+ * @return None.
  */
 void RTC_EnableCMPInterrupt(void);
 /**
  * @ingroup rtc
- * @brief Disable the CMP interrupt for RTC interface.
- * @param none
- * @return none
+ * @brief Disables the CMP Interrupt.
+ * @param None.
+ * @return None.
  */
 void RTC_DisableCMPInterrupt(void);
 /**
  * @ingroup rtc
- * @brief Enable the overflow interrupt set the OVF flag, if the counter reached value from the period register and wrapped to zero.
- * @param none
- * @return none
+ * @brief Enables the Overflow (OVF) Interrupt. 
+ * @param None.
+ * @return None.
  */
 void RTC_EnableOVFInterrupt(void);
 /**
  * @ingroup rtc
- * @brief Disable the Overflow interrupt for RTC interface.
- * @param none
- * @return none
+ * @brief Disables the OVF Interrupt for the RTC module.
+ * @param None.
+ * @return None.
  */
 void RTC_DisableOVFInterrupt(void);
 /**
  * @ingroup rtc
- * @brief Enable the Period Interrupt Timer to set the flag, if a time period has passed as configured in period bit field.
- * @param none
- * @return none
+ * @brief Enables the Periodic Interrupt Timer (PIT) interrupt for the RTC module. 
+ * @param None.
+ * @return None.
  */
 void RTC_EnablePITInterrupt(void);
 /**
  * @ingroup rtc
- * @brief Disable the PIT interrupt for RTC interface.
- * @param none
- * @return none
+ * @brief Disables the PIT Interrupt for the RTC module.
+ * @param None.
+ * @return None.
  */
 void RTC_DisablePITInterrupt(void);
 /**
  * @ingroup rtc
- * @brief Clearing the Overflow interrupt flag after the overflow flag set.
- * @param none
- * @return none
+ * @brief Clears the OVF Interrupt flag.
+ * @param None.
+ * @return None.
  */
 void RTC_ClearOVFInterruptFlag(void);
 /**
  * @ingroup rtc
- * @brief Enable the Overflow interrupt to set overflow flag, when overflow occur.
- * @param none
- * @return none
+ * @brief Checks if Overflow interrupt has occurred.
+ * @param None.
+ * @retval True - Interrupt is enabled.
+ * @retval False - Interrupt is disabled.
  */
 bool RTC_IsOVFInterruptEnabled(void);
+/**
+ * @ingroup rtc
+ * @brief Writes a value to the CMP register of the RTC module.
+ * @param uint16_t value - Value to be written to the CMP register of the RTC.
+ * @return None.
+ */
+void RTC_WriteCMPRegister(uint16_t value);
+/**
+ * @ingroup rtc
+ * @brief Returns the value from the CMP register.
+ * @param None.
+ * @return uint16_t - Value of the Compare register.
+ */
+uint16_t RTC_ReadCMPRegister(void);
 
 
 #endif /* RTCDRIVER_H */
